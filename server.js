@@ -17,13 +17,20 @@ const db = mysql.createConnection({
   user: process.env.DB_USER,
   password: process.env.DB_PASS, // empty string
   database: process.env.DB_NAME,
+  port:process.env.DB_PORT
 });
 
 db.connect((err) => {
-  if (err) console.log("DB error:", err);
-  else console.log("Connected to MySQL!");
-});
+  if (err) throw err;
+  console.log("Connected to MySQL!");
 
+  const sql = fs.readFileSync("import.sql").toString();
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log("SQL imported successfully!");
+    db.end();
+  });
+});
 // TEST
 app.get("/", (req, res) => {
   res.send("Backend is running!");
