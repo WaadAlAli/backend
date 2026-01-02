@@ -10,21 +10,21 @@ app.use(cors());
 app.use(express.json());
 app.use("/images", express.static("images"));
 
-
-// DB
 const db = mysql.createConnection({
-  host:"localhost",
-  user: "root",
-  password: "", // empty string
-  database:"healthy_meal_planner"
- 
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT,
 });
 
 db.connect((err) => {
-  if (err) throw err;
-  console.log("Connected to MySQL!");
- } 
-)
+  if (err) {
+    console.log("DB ERROR:", err);
+  } else {
+    console.log("Connected to Railway MySQL");
+  }
+});
 // TEST
 app.get("/", (req, res) => {
   res.send("Backend is running!");
