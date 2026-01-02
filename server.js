@@ -398,7 +398,18 @@ app.get("/admin/messages", (req, res) => {
     res.json(data);
   });
 });
+// POST contact message
+app.post("/contact/messages", (req, res) => {
+  const { name, email, message } = req.body;
 
+  const q =
+    "INSERT INTO contact_messages (name, email, message) VALUES (?, ?, ?)";
+
+  db.query(q, [name, email, message], (err) => {
+    if (err) return res.status(500).json(err);
+    res.json({ message: "Message saved" });
+  });
+});
 // Mark message as read
 app.put("/admin/messages/read/:id", (req, res) => {
   const q = "UPDATE contact_messages SET is_read=TRUE WHERE message_id=?";
