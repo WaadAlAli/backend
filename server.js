@@ -13,24 +13,18 @@ app.use("/images", express.static("images"));
 
 // DB
 const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS, // empty string
-  database: process.env.DB_NAME,
-  port:process.env.DB_PORT
+  host:"localhost",
+  user: "root",
+  password: "", // empty string
+  database:"healthy_meal_planner"
+ 
 });
 
 db.connect((err) => {
   if (err) throw err;
   console.log("Connected to MySQL!");
-
-  const sql = fs.readFileSync("import.sql").toString();
-  db.query(sql, (err, result) => {
-    if (err) throw err;
-    console.log("SQL imported successfully!");
-    db.end();
-  });
-});
+ } 
+)
 // TEST
 app.get("/", (req, res) => {
   res.send("Backend is running!");
@@ -471,11 +465,7 @@ app.get("/dashboard", (req, res) => {
     });
   });
 });
-// Serve React build
-app.use(express.static(path.join(__dirname, "build")));
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
-});
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
